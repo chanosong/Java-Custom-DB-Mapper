@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Sql<T> {
-    private String query;
-
+    private StringBuilder query;
 
     public Sql append(String query, int... i) {
         // TODO: query builder
@@ -14,11 +13,11 @@ public class Sql<T> {
     }
 
     public Sql append(String query) {
-
+        // TODO: query builder
     }
 
     public Sql append(String query, String... args) {
-
+        // TODO: query builder
     }
     
     public Sql appendIn(String query, List<> args) {
