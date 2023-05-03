@@ -11,7 +11,7 @@ public class SimpleDb {
     public SimpleDb(String host, String user, String password, String dbName) {
         int port = 3306;
 
-        String url = "jdbc://mariadb://" + host + ":" + user + "/" + dbName
+        String url = "jdbc:mariadb://" + host + ":" + port + "/" + dbName
                 + "?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull";
 
         try {
@@ -29,10 +29,12 @@ public class SimpleDb {
     public void run(String query, Object... args) {
         // TODO: query 실행
     }
-    
+
+    /*
     public Sql genSql() {
         // TODO: Sql 객체 생성 및 반환
     }
+     */
 
 
     

@@ -7,6 +7,7 @@ import java.util.Map;
 public class Sql<T> {
     private StringBuilder query;
 
+    /*
     public Sql append(String query, int... i) {
         // TODO: query builder
         return this;
@@ -57,10 +58,12 @@ public class Sql<T> {
     }
 
     public T selectRow(Class<T> objectClass) {
-        // TODO: SELECT 결과 Object로 반환
+        // TODO: SELECT 결과 T로 반환
     }
 
     public List<T> selectRows(Class<T> objectClass) {
-
+        // TODO: SELECT 결과 List<T>로 반환
     }
+
+     */
 }
