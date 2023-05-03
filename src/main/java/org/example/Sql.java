@@ -1,32 +1,42 @@
 package org.example;
 
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class Sql<T> {
     private StringBuilder query;
+    private List<Object> params;
 
-    /*
-    public Sql append(String query, int... i) {
-        // TODO: query builder
-        return this;
+    private SimpleDb simpleDb;
+
+    public Sql(SimpleDb simpleDb) {
+        this.simpleDb = simpleDb;
+        this.query = new StringBuilder();
+        this.params = new ArrayList<>();
     }
 
     public Sql append(String query) {
-        // TODO: query builder
+        this.query.append(query).append(" ");
+        return this;
     }
 
-    public Sql append(String query, String... args) {
-        // TODO: query builder
-    }
-    
-    public Sql appendIn(String query, List<> args) {
-        // TODO: query의 ? 안에 List 내부 삽입
+    public Sql append(String query, Object... args) {
+        this.query.append(query).append(" ");
+        Collections.addAll(params, args);
+        return this;
     }
 
     public long insert() {
-        // TODO: AUTO_INCREMENT에 의해 생성된 PK 반환
+        return simpleDb.runInsertAndGetPK(query.toString(), params.toArray());
+    }
+
+    /*
+    public Sql appendIn(String query, List<> args) {
+        // TODO: query의 ? 안에 List 내부 삽입
     }
     
     public long update() {
