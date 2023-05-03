@@ -2,6 +2,7 @@ package org.example;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 public class SimpleDb {
     private boolean devMode;
@@ -27,7 +28,22 @@ public class SimpleDb {
     }
 
     public void run(String query, Object... args) {
-        // TODO: query 실행
+        try {
+            // PreparedStatement 생성
+            PreparedStatement psmt = connection.prepareStatement(query);
+
+            // 인자 넣기
+            for (int i = 0; i < args.length; i++) {
+                psmt.setObject(i + 1, args[i]);
+            }
+
+            // 실행
+            psmt.executeUpdate();
+            System.out.println("쿼리 실행 완료");
+        } catch (Exception e) {
+            System.out.println("오류 발생");
+            e.printStackTrace();
+        }
     }
 
     /*
