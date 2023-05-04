@@ -1,10 +1,11 @@
 package org.example;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Sql<T> {
     private StringBuilder query;
@@ -65,6 +66,36 @@ public class Sql<T> {
         }
     }
 
+    // ResultSet -> Map<String, Object> 변환 함수
+    public Map<String, Object> convertRsToMap(ResultSet rs) throws SQLException {
+        Map<String, Object> map = new HashMap<>();
+        ResultSetMetaData rsMeta = rs.getMetaData();
+        int rsNum = rsMeta.getColumnCount();
+
+        for (int i = 0; i < rsNum; i++) {
+            String columnName = rsMeta.getColumnName(i + 1);
+            Object value = rs.getObject(columnName);
+
+            // Timestamp인 경우 LocalDateTime으로 컨버팅
+            if (value.getClass().equals(Timestamp.class)) {
+                map.put(columnName, ((Timestamp) value).toLocalDateTime());
+            }
+            else {
+                map.put(columnName, rs.getObject(columnName));
+            }
+        }
+
+        return map;
+    }
+
+    public Map<String, Object> selectRow() {
+        try {
+            return convertRsToMap(simpleDb.runAndGetResult(query.toString(), params.toArray()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*
     public Sql appendIn(String query, List<> args) {
         // TODO: query의 ? 안에 List 내부 삽입
@@ -73,10 +104,6 @@ public class Sql<T> {
     
     public List<Long> selectLongs() {
         // TODO: SELECT 결과 List<Long>으로 반환
-    }
-
-    public Map<String, Object> selectRow() {
-        // TODO: SELECT 결과 Map<String,Object> 형태로 반환
     }
 
     public T selectRow(Class<T> objectClass) {
