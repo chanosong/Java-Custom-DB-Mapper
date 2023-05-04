@@ -1,11 +1,8 @@
 package org.example;
 
-import java.sql.PreparedStatement;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class Sql<T> {
     private StringBuilder query;
@@ -35,15 +32,16 @@ public class Sql<T> {
     }
 
     public long update() {
-        return simpleDb.runUpdateAndGetNum(query.toString(), params.toArray());
+        return simpleDb.runAndGetEffectedNum(query.toString(), params.toArray());
     }
+
+    public long delete() {
+        return simpleDb.runAndGetEffectedNum(query.toString(), params.toArray());
+    }
+
     /*
     public Sql appendIn(String query, List<> args) {
         // TODO: query의 ? 안에 List 내부 삽입
-    }
-    
-    public long delete() {
-        // TODO: 삭제된 row 개수 반환
     }
     
     public LocalDateTime selectDatetime() {

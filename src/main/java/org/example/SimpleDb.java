@@ -1,9 +1,6 @@
 package org.example;
 
 import java.sql.*;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 public class SimpleDb {
     private boolean devMode;
@@ -81,7 +78,7 @@ public class SimpleDb {
         return pk;
     }
 
-    public long runUpdateAndGetNum(String query, Object... args) {
+    public long runAndGetEffectedNum(String query, Object... args) {
         long updatedRow = 0L;
 
         try {
