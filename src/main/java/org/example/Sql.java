@@ -34,13 +34,12 @@ public class Sql<T> {
         return simpleDb.runInsertAndGetPK(query.toString(), params.toArray());
     }
 
+    public long update() {
+        return simpleDb.runUpdateAndGetNum(query.toString(), params.toArray());
+    }
     /*
     public Sql appendIn(String query, List<> args) {
         // TODO: query의 ? 안에 List 내부 삽입
-    }
-    
-    public long update() {
-        // TODO: 수정된 row 개수 반환
     }
     
     public long delete() {

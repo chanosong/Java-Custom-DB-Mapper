@@ -47,8 +47,8 @@ public class SimpleDb {
         }
     }
 
-    public Long runInsertAndGetPK(String query, Object... args) {
-        Long pk = -1L;
+    public long runInsertAndGetPK(String query, Object... args) {
+        long pk = -1L;
 
         try {
             // PreparedStatement 생성
@@ -72,7 +72,7 @@ public class SimpleDb {
                 System.out.println("생성된 PK가 없음");
             }
 
-            System.out.println("쿼리 실행 완료");
+            // System.out.println("쿼리 실행 완료");
         } catch (Exception e) {
             System.out.println("오류 발생");
             e.printStackTrace();
@@ -81,6 +81,26 @@ public class SimpleDb {
         return pk;
     }
 
+    public long runUpdateAndGetNum(String query, Object... args) {
+        long updatedRow = 0L;
+
+        try {
+            // PreparedStatement 설정
+            PreparedStatement psmt = connection.prepareStatement(query);
+
+            // 인자 넣기
+            for (int i = 0; i < args.length; i++) {
+                psmt.setObject(i + 1, args[i]);
+            }
+
+            updatedRow = psmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Update 중 오류 발생");
+            e.printStackTrace();
+        }
+
+        return updatedRow;
+    }
 
     public Sql genSql() {
         return new Sql(this);
