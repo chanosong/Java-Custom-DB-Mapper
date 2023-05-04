@@ -57,6 +57,14 @@ public class Sql<T> {
         }
     }
 
+    public String selectString() {
+        try {
+            return simpleDb.runAndGetResult(query.toString(), params.toArray()).getString(1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*
     public Sql appendIn(String query, List<> args) {
         // TODO: query의 ? 안에 List 내부 삽입
@@ -65,10 +73,6 @@ public class Sql<T> {
     
     public List<Long> selectLongs() {
         // TODO: SELECT 결과 List<Long>으로 반환
-    }
-    
-    public String selectString() {
-        // TODO: SELECT 결과 String으로 반환
     }
 
     public Map<String, Object> selectRow() {
