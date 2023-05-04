@@ -49,14 +49,19 @@ public class Sql<T> {
         }
     }
 
+    public long selectLong() {
+        try {
+            return simpleDb.runAndGetResult(query.toString(), params.toArray()).getLong(1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*
     public Sql appendIn(String query, List<> args) {
         // TODO: query의 ? 안에 List 내부 삽입
     }
-    
-    public long selectLong() {
-        // TODO: SELECT 결과 Long으로 반환
-    }
+
     
     public List<Long> selectLongs() {
         // TODO: SELECT 결과 List<Long>으로 반환
