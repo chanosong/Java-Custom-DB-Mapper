@@ -1,5 +1,7 @@
 package org.example;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,13 +41,17 @@ public class Sql<T> {
         return simpleDb.runAndGetEffectedNum(query.toString(), params.toArray());
     }
 
+    public LocalDateTime selectDatetime() {
+        try {
+            return simpleDb.runAndGetResult(query.toString(), params.toArray()).getTimestamp(1).toLocalDateTime();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*
     public Sql appendIn(String query, List<> args) {
         // TODO: query의 ? 안에 List 내부 삽입
-    }
-    
-    public LocalDateTime selectDatetime() {
-        // TODO: 실행된 시각 반환
     }
     
     public long selectLong() {

@@ -144,4 +144,20 @@ public class SimpleDbTest {
 
         assertThat(affectedRowsCount).isEqualTo(2);
     }
+
+    @Test
+    public void selectDatetime() {
+        Sql sql = simpleDb.genSql();
+        /*
+        == rawSql ==
+        SELECT NOW()
+        */
+        sql.append("SELECT NOW()");
+
+        LocalDateTime datetime = sql.selectDatetime();
+
+        long diff = ChronoUnit.SECONDS.between(datetime, LocalDateTime.now());
+
+        assertThat(diff).isLessThanOrEqualTo(1L);
+    }
 }

@@ -82,7 +82,7 @@ public class SimpleDb {
         long updatedRow = 0L;
 
         try {
-            // PreparedStatement 설정
+            // PreparedStatement 생성
             PreparedStatement psmt = connection.prepareStatement(query);
 
             // 인자 넣기
@@ -92,11 +92,38 @@ public class SimpleDb {
 
             updatedRow = psmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("Update 중 오류 발생");
+            System.out.println("실행 중 오류 발생");
             e.printStackTrace();
         }
 
         return updatedRow;
+    }
+    
+    public ResultSet runAndGetResult(String query, Object... args) {
+        ResultSet rs = null;
+
+        try {
+            // PreparedStatement 생성
+            PreparedStatement psmt = connection.prepareStatement(query);
+
+            // 인자 넣기
+            for (int i = 0; i < args.length; i++) {
+                psmt.setObject(i + 1, args[i]);
+            }
+
+            // 실행 결과 저장
+            rs =  psmt.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("실행 결과가 존재하지 않음");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("실행 중 오류 발생");
+            e.printStackTrace();
+        }
+
+        return rs;
     }
 
     public Sql genSql() {
