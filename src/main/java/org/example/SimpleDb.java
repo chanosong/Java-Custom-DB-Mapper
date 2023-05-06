@@ -1,9 +1,7 @@
 package org.example;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SimpleDb {
     private boolean devMode;
@@ -127,6 +125,33 @@ public class SimpleDb {
         }
 
         return rs;
+    }
+
+    public List<Long> runAndGetResultByList(String query, Object... args) {
+        ResultSet rs = null;
+        List<Long> list = new ArrayList<>();
+        try {
+            // PreparedStatement 생성
+            PreparedStatement psmt = connection.prepareStatement(query);
+
+            // 인자 넣기
+            for (int i = 0; i < args.length; i++) {
+                psmt.setObject(i + 1, args[i]);
+            }
+
+            // 실행 결과 저장
+            rs =  psmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(rs.getLong(1));
+            }
+
+        } catch (Exception e) {
+            System.out.println("실행 중 오류 발생");
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
     public Sql genSql() {

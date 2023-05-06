@@ -141,11 +141,16 @@ public class Sql<T> {
         return this;
     }
 
-    /*
+
     public List<Long> selectLongs() {
-        // TODO: SELECT 결과 List<Long>으로 반환
+        try {
+            return simpleDb.runAndGetResultByList(query.toString(), params.toArray());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    /*
     public T selectRow(Class<T> objectClass) {
         // TODO: SELECT 결과 T로 반환
     }
