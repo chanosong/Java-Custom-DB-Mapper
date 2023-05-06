@@ -216,4 +216,65 @@ public class SimpleDbTest {
         assertThat(articleMap.get("modifiedDate")).isInstanceOf(LocalDateTime.class);
         assertThat(articleMap.get("isBlind")).isEqualTo(false);
     }
+
+
+    @Test
+    public void selectArticle() {
+
+        Sql sql = simpleDb.genSql();
+        /*
+        == rawSql ==
+        SELECT * FROM article WHERE id = 1
+        */
+        /*
+        sql.append("SELECT * FROM article WHERE id = 1");
+        Article article = sql.selectRow(Article.class);
+
+        assertThat(article.getId()).isEqualTo(1L);
+        assertThat(article.getTitle()).isEqualTo("제목1");
+        assertThat(article.getBody()).isEqualTo("내용1");
+        assertThat(article.getCreatedDate()).isNotNull();
+        assertThat(article.getModifiedDate()).isNotNull();
+        assertThat(article.isBlind()).isFalse();
+
+         */
+    }
+
+    @Test
+    public void selectBind() {
+        Sql sql = simpleDb.genSql();
+        /*
+        == rawSql ==
+        SELECT COUNT(*)
+        FROM article
+        WHERE id BETWEEN '1' AND '3'
+        AND title LIKE CONCAT('%', '제목' '%')
+        */
+        sql.append("SELECT COUNT(*)")
+                .append("FROM article")
+                .append("WHERE id BETWEEN ? AND ?", 1, 3)
+                .append("AND title LIKE CONCAT('%', ? '%')", "제목");
+
+        long count = sql.selectLong();
+
+        assertThat(count).isEqualTo(3);
+    }
+
+    @Test
+    public void selectIn() {
+        Sql sql = simpleDb.genSql();
+        /*
+        == rawSql ==
+        SELECT COUNT(*)
+        FROM article
+        WHERE id IN ('1','2','3')
+        */
+        sql.append("SELECT COUNT(*)")
+                .append("FROM article")
+                .appendIn("WHERE id IN (?)", Arrays.asList(1L, 2L, 3L));
+
+        long count = sql.selectLong();
+
+        assertThat(count).isEqualTo(3);
+    }
 }

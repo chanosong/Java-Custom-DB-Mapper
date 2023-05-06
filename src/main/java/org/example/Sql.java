@@ -1,5 +1,7 @@
 package org.example;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -96,12 +98,50 @@ public class Sql<T> {
         }
     }
 
-    /*
-    public Sql appendIn(String query, List<> args) {
-        // TODO: query의 ? 안에 List 내부 삽입
+    public <T> T selectRow(Class<T> classObject) {
+        // FIXME: 리플렉션 제대로 적용되지 않는 문제
+        try {
+            T obj = classObject.getDeclaredConstructor().newInstance();
+
+            Map<String, Object> map = convertRsToMap(simpleDb.runAndGetResult(query.toString(), params.toArray()));
+
+            for (Field field: classObject.getDeclaredFields()) {
+                field.setAccessible(true);
+                Object value = map.get(field.getName());
+
+                // value가 null일 경우에는 해당 필드에 값을 설정하지 않음
+                if (value != null) {
+                    String fieldName = field.getName();
+                    Method method = classObject.getDeclaredMethod("set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1), field.getType());
+                    method.invoke(obj, value);
+                }
+            }
+
+            return obj;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    
+
+    public Sql appendIn(String query, List<T> args) {
+        StringJoiner sj = new StringJoiner(",");
+        
+        // query의 QuestionMark 개수 변경, params 삽입
+        for (T arg : args) {
+            sj.add("?");
+            params.add(arg);
+        }
+
+        // query 변경
+        query = query.replace("?", sj.toString());
+        this.query.append(query).append(" ");
+
+        return this;
+    }
+
+    /*
     public List<Long> selectLongs() {
         // TODO: SELECT 결과 List<Long>으로 반환
     }
